@@ -38,9 +38,9 @@ mysqldump -u ${!USER} -h ${!SOURCE_HOST} -p${!PASS} ${!DB_NAME} \
   --column-statistics=0 \
   --no-create-info \
   --insert-ignore \
-  --ignore-table=${!DB_NAME}.versions \
-  --ignore-table=${!DB_NAME}.users \
-  --ignore-table=${!DB_NAME}.webhook_events > ${DATA_FILE}
+  --ignore-table=${!DB_NAME}.<table1> \
+  --ignore-table=${!DB_NAME}.<table2> \
+  --ignore-table=${!DB_NAME}.<table3> > ${DATA_FILE}
 
 dataDumpRetVal=$?
 if [ $dataDumpRetVal -ne 0 ]; then
