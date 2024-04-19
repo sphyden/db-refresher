@@ -11,7 +11,7 @@ PASS=$SERVICE\_DB_PASS
 SCHEMA_FILE="./tmp/schema_dump.sql"
 DATA_FILE="./tmp/data_dump.sql"
 
-MESSAGE="Beginning reload of svod-be staging db"
+MESSAGE="Beginning reload of <SERVICE> staging db"
 echo "${MESSAGE}"
 python3 sns_message.py "start" "${MESSAGE}"
 
@@ -84,19 +84,7 @@ fi
 
 #dump the staging users data into the fresh database
 
-echo "Reloading staging users data for ${!TARGET_HOST} from ${USERS_FILE}"
-
-mysql -f -u ${!USER} -h ${!TARGET_HOST} -p${!PASS}  ${!DB_NAME} < ${USERS_FILE}
-
-usersLoadRetVal=$?
-if [ $usersLoadRetVal -ne 0 ]; then
-  MESSAGE="Something when wrong with the new db reload, please look at the logs at <wherever your logs are>"
-  echo "${MESSAGE}"
-  python3 sns_message.py "fail" "${MESSAGE}"
-  exit $usersLoadRetVal
-fi
-
-MESSAGE="Successfully reloaded ${SERVICE} staging DB from Prod with exit codes: schema load: ${schemaLoadRetVal}, data load: ${dataLoadRetVal}, staging user load: ${usersLoadRetVal}"
+MESSAGE="Successfully reloaded ${SERVICE} staging DB from Prod with exit codes: schema load: ${schemaLoadRetVal}, data load: ${dataLoadRetVal}"
 echo "${MESSAGE}"
 python3 sns_message.py "success" "${MESSAGE}"
 exit 0
